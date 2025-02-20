@@ -1,15 +1,13 @@
 # Use FQDN for host identification
 hostname_fqdn: true
 
-# Primary Datadog API Key
+# Primary API Key (Main Datadog Instance)
 api_key: <PRIMARY_API_KEY>
 
-# Additional Datadog Instances for Dual Shipping
+# Secondary API Key (Additional Datadog Instance)
 additional_endpoints:
   "https://app.datadoghq.com":
     - <SECONDARY_API_KEY>
-  "https://app.datadoghq.eu":
-    - <EU_API_KEY>
 
 # Enable Infrastructure Metrics
 process_config:
@@ -21,29 +19,23 @@ apm_config:
   additional_endpoints:
     "https://trace.agent.datadoghq.com":
       - <SECONDARY_API_KEY>
-    "https://trace.agent.datadoghq.eu":
-      - <EU_API_KEY>
 
 # Enable Logging
 logs_enabled: true
 log_level: INFO
 
-# Log Forwarding Configuration
+# Log Forwarding Configuration (Primary & Secondary Instances)
 logs_config:
   additional_endpoints:
     - host: intake.logs.datadoghq.com
       port: 443
       api_key: <SECONDARY_API_KEY>
-    - host: intake.logs.datadoghq.eu
-      port: 443
-      api_key: <EU_API_KEY>
 
 # Custom Tags
 tags:
   - env:s2
   - customer:ns-pds
-  - os:windows  # Automatically detected on Windows hosts
-  - os:linux  # Automatically detected on Linux hosts
+  - region:us-east-1
 
 # Log File Collection (Linux)
 logs:
@@ -51,16 +43,6 @@ logs:
     path: "/pdslogs/scc/current/*"
     service: "OSCLOGS"
     source: "tux-132.dc2.utcs.nscorp.com"
-
-# Windows Event Log Collection (Windows)
-  - type: windows_event
-    channel_path: "System"
-    source: "windows"
-    service: "windows-logs"
-  - type: windows_event
-    channel_path: "Application"
-    source: "windows"
-    service: "windows-app-logs"
 
 # Enable Network Monitoring
 network_monitoring:
