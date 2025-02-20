@@ -1,0 +1,68 @@
+# Managed by Ansible (if applicable)
+
+## Use FQDN for host identification
+hostname_fqdn: true
+
+## Primary API Key (First Datadog Instance)
+api_key: <PRIMARY_API_KEY>
+
+## Additional Endpoints for Dual Shipping (Second & Third Datadog Instances)
+additional_endpoints:
+  "https://app.datadoghq.com":
+    - <SECONDARY_API_KEY>
+    - <TERTIARY_API_KEY>  # Optional: Add more instances if needed
+  "https://app.datadoghq.eu":
+    - <EU_API_KEY>  # If sending data to the EU Datadog instance
+
+## Enable Infrastructure Metrics
+process_config:
+  enabled: "true"
+
+## Enable APM Tracing
+apm_config:
+  enabled: true
+  additional_endpoints:
+    "https://trace.agent.datadoghq.com":
+      - <SECONDARY_API_KEY>
+      - <TERTIARY_API_KEY>
+    "https://trace.agent.datadoghq.eu":
+      - <EU_API_KEY>
+
+## Enable Logging
+logs_enabled: true
+log_level: INFO
+
+## Log Forwarding Configuration
+logs_config:
+  additional_endpoints:
+    - host: intake.logs.datadoghq.com
+      port: 443
+      api_key: <SECONDARY_API_KEY>
+    - host: intake.logs.datadoghq.eu
+      port: 443
+      api_key: <EU_API_KEY>
+
+## Custom Tags for Organization and Environment
+tags:
+  - env:s2
+  - customer:ns-pds
+  - team:devops
+  - region:us-east-1
+
+## Log File Collection Configuration
+logs:
+  - type: file
+    path: "/pdslogs/scc/current/*"
+    service: "OSCLOGS"
+    source: "tux-132.dc2.utcs.nscorp.com"
+
+## Enable Network Monitoring (Optional)
+network_monitoring:
+  enabled: true
+
+## Enable Security Agent (Optional)
+security_agent:
+  compliance:
+    enabled: true
+  runtime:
+    enabled: true
